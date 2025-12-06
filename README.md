@@ -1,78 +1,148 @@
 # RetroDream Store 🎮
 
-**RetroDream** — це Full-stack веб-застосунок для електронної комерції, спеціалізований на продажу ретро-консолей та аксесуарів. Проект демонструє сучасну серверну архітектуру на базі Next.js, забезпечуючи високу продуктивність та SEO-оптимізацію.
+**RetroDream** — Full-stack веб-застосунок для електронної комерції, спеціалізований на продажу ретро-консолей та аксесуарів. Проєкт демонструє сучасну серверну архітектуру на базі Next.js, забезпечуючи високу продуктивність і SEO-оптимізацію.
+
+---
 
 ## 🛠 Технологічний стек
 
-- **Framework:** [Next.js 15](https://nextjs.org/) (React)
-- **Стилізація:** [Styled-components](https://styled-components.com/)
+- **Framework:** Next.js 15 (React)
+- **Стилізація:** Styled-components
 - **Backend:** Next.js API Routes (Serverless Functions)
-- **База даних:** MongoDB (через Mongoose ODM)
-- **CMS:** Sanity.io (Headless CMS для управління товарами)
-- **Автентифікація:** JWT (JSON Web Tokens) + Secure Cookies
+- **База даних:** MongoDB (Mongoose ODM)
+- **CMS:** Sanity.io
+- **Автентифікація:** JWT + Secure Cookies
 - **Тестування:** Jest, Node-Mocks-HTTP
 - **CI/CD:** GitHub Actions
 
 ---
 
-## 🏗 Архітектура
+## 🏗 Архітектура та Дизайн (Лабораторна №2)
 
-Застосунок побудований за **Монолітною** архітектурою, яка логічно розділена на шари:
+### Архітектурні шари
+1. **Client Layer (`/src/components`)** — React UI компоненти.
+2. **API Layer (`/src/pages/api`)** — логіка серверних ендпоінтів.
+3. **Data Layer (`/src/models`)** — Mongoose-схеми.
+4. **Service Layer (`/src/lib`)** — логіка БД та автентифікації.
 
-1.  **Client Layer (`/src/components`):** React-компоненти, що відповідають за UI/UX.
-2.  **API Layer (`/src/pages/api`):** RESTful ендпоінти, що виконують роль бекенду.
-3.  **Data Layer (`/src/models`):** Mongoose схеми, що описують структуру Users та Orders.
-4.  **Service Layer (`/src/lib`):** Перевикористовувана логіка для підключення до БД та автентифікації.
+### Діаграма компонентів
+```mermaid
+graph TD
+    User((Користувач)) -->|HTTPS / Browser| Client[Client Layer / React UI]
+    Client -->|JSON / Fetch| API[API Layer / Next.js Routes]
+
+    subgraph Backend Services
+    API -->|Verify Token| Auth[Auth Module / JWT]
+    API -->|Query Data| DB_Model[Mongoose Models]
+    end
+
+    subgraph External Data
+    DB_Model -->|Read/Write| Mongo[(MongoDB Atlas)]
+    API -->|Fetch Content| CMS[(Sanity.io)]
+    end
+```
+
+### ER-Діаграма
+```mermaid
+erDiagram
+    USER ||--o{ ORDER : places
+    USER {
+        ObjectId _id
+        string email
+        string password_hash
+        string name
+        CartItem[] cart
+    }
+    ORDER {
+        ObjectId _id
+        ObjectId userId
+        OrderItem[] items
+        float totalPrice
+        string address
+        string status
+        date createdAt
+    }
+    PRODUCT {
+        string _id
+        string title
+        float price
+        string imageUrl
+    }
+
+    ORDER ||--|{ PRODUCT : contains
+```
 
 ---
 
 ## 🚀 Основний функціонал
+- Автентифікація з JWT та bcrypt
+- Каталог товарів із Sanity CMS
+- Кошик збережений у MongoDB
+- Оформлення замовлення
+- Адаптивний UI
 
-*   **Автентифікація:** Реєстрація та логін з хешуванням паролів (bcrypt) та JWT.
-*   **Каталог товарів:** Динамічне отримання даних про товари з Sanity CMS.
-*   **Кошик:** Додавання/видалення товарів, збереження стану в MongoDB.
-*   **Оформлення замовлення:** Створення замовлення з валідацією полів.
-*   **Адаптивність:** Інтерфейс оптимізовано для мобільних та десктопних пристроїв.
+---
+
+### Ключові сценарії (Data Flow)
+
+Опис потоку даних для основних бізнес-процесів застосунку:
+
+**1. Додавання товару в кошик:**
+1.  **User Action:** Користувач натискає кнопку "Add to Cart" на сторінці товару.
+2.  **Client:** React-компонен відправляє асинхронний `POST` запит на ендпоінт `/api/cart/addItem`.
+3.  **Server (Auth):** Middleware перевіряє наявність та валідність `JWT` токена в куках.
+4.  **Server (Logic):** Знаходить користувача в колекції `Users` (MongoDB). Перевіряє, чи є товар вже в масиві `cart`.
+    *   *Якщо є:* збільшує поле `quantity`.
+    *   *Якщо немає:* додає новий об'єкт товару в масив.
+5.  **Database:** Виконується `user.save()`, оновлюючи стан у базі даних.
+
+**2. Оформлення замовлення (Checkout):**
+1.  **User Action:** Користувач заповнює форму доставки та натискає "Place Order".
+2.  **Client:** Відправляється `POST` запит на `/api/orders/create` з даними форми та вмістом кошика.
+3.  **Server (Validation):** Бекенд валідує вхідні дані (адреса, сума).
+4.  **Database (Transaction):**
+    *   Створюється новий документ у колекції `Orders`.
+    *   Знаходиться документ поточного користувача в колекції `Users`.
+    *   Поле `cart` очищається (`[]`).
+5.  **Response:** Сервер повертає ID створеного замовлення, клієнт перенаправляється на головну.
 
 ---
 
 ## ⚙️ Інструкція з запуску
 
 ### Вимоги
-- Node.js (v18+)
-- Обліковий запис MongoDB Atlas
-- Проект в Sanity.io
+- Node.js v18+
+- MongoDB Atlas
+- Sanity.io проект
 
-### Встановлення
+### 1. Клонування
+```bash
+git clone https://github.com/your-username/retrodream.git
+cd retrodream
+```
 
-1.  **Клонування репозиторію:**
-    ```bash
-    git clone https://github.com/your-username/retrodream.git
-    cd retrodream
-    ```
+### 2. Встановлення залежностей
+```bash
+npm install
+```
 
-2.  **Встановлення залежностей:**
-    ```bash
-    npm install
-    ```
+### 3. Налаштування `.env.local`
+```env
+MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/dbname
+JWT_SECRET=your_super_secret_key
+NEXT_PUBLIC_SANITY_PROJECT_ID=your_sanity_id
+NEXT_PUBLIC_SANITY_DATASET=production
+```
 
-3.  **Налаштування оточення:**
-    Створіть файл `.env.local` у корені проекту:
-    ```env
-    MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/dbname
-    JWT_SECRET=your_super_secret_key
-    NEXT_PUBLIC_SANITY_PROJECT_ID=your_sanity_id
-    NEXT_PUBLIC_SANITY_DATASET=production
-    ```
+### 4. Запуск
+```bash
+npm run dev
+```
 
-4.  **Запуск локального сервера:**
-    ```bash
-    npm run dev
-    ```
-    Відкрийте [http://localhost:3000](http://localhost:3000) у браузері.
+Відкрити: http://localhost:3000
 
-### Тестування
+---
 
-Запуск набору тестів (Unit & Integration):
+## 🧪 Тестування
 ```bash
 npm test
