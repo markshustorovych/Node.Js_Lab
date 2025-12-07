@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Card = styled.div`
   width: 400px;
@@ -13,7 +13,9 @@ export const Card = styled.div`
   flex-direction: column;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
   flex-shrink: 0;
 
   &:hover {
@@ -22,21 +24,21 @@ export const Card = styled.div`
   }
 `;
 
-export const ProductImage = styled.img`
+export const ProductImageWrapper = styled.div`
   width: 100%;
   height: 220px;
-  object-fit: cover;
   border-radius: 16px;
+  overflow: hidden;
   margin-bottom: 1.2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
 
-export const ProductTitle = styled.h3`
+export const ProductTitle = styled.h2`
   font-size: 1.6rem;
   font-weight: 700;
   color: #013a4e;
   margin: 0.5rem 0;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const ProductPrice = styled.p`
@@ -44,7 +46,7 @@ export const ProductPrice = styled.p`
   font-weight: 600;
   color: #036b8d;
   margin-bottom: 1.2rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 `;
 
 export const AddButton = styled.button`
@@ -56,7 +58,9 @@ export const AddButton = styled.button`
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
 
   &:hover {
     background: linear-gradient(135deg, #6ecfee, #a3e1fa);

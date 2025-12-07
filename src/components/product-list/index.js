@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import ProductCard from '@/components/product-card';
-import { ListWrapper, PaginationWrapper, PageButton } from './styled';
+import React, { useState } from "react";
+import ProductCard from "@/components/product-card";
+import { ListWrapper, PaginationWrapper, PageButton } from "./styled";
 
 const PRODUCTS_PER_PAGE = 4;
 
@@ -13,22 +13,31 @@ export default function ProductList({ products }) {
 
   return (
     <ListWrapper>
-      {currentProducts.map((product) => (
+      {currentProducts.map((product, index) => (
         <ProductCard
           key={product._id}
           id={product._id}
           title={product.title}
           price={product.price}
           imageUrl={product.imageUrl}
+          priority={index < 2}
         />
       ))}
 
       <PaginationWrapper>
-        <PageButton onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>
+        <PageButton
+          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          disabled={currentPage === 1}
+        >
           prebious
         </PageButton>
-        <span>page {currentPage} of {totalPages}</span>
-        <PageButton onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>
+        <span>
+          page {currentPage} of {totalPages}
+        </span>
+        <PageButton
+          onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+          disabled={currentPage === totalPages}
+        >
           next
         </PageButton>
       </PaginationWrapper>
