@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Image from "next/image";
 import {
   HeaderContainer,
-  Logo,
+  LeftSection,
+  LogoWrapper,
   Title,
+  RightSection,
   LoginButton,
   RegisterButton,
-  RightSection,
-  LeftSection,
   CartButton,
 } from "./styled";
 
@@ -28,17 +29,13 @@ export default function StoreHeader() {
         } else {
           if (isMounted) setIsLoggedIn(false);
         }
-      } catch (err) {
-        console.error("Error checking session:", err);
+      } catch {
         if (isMounted) setIsLoggedIn(false);
       }
     };
 
     checkSession();
-
-    const handleRouteChange = () => {
-      checkSession();
-    };
+    const handleRouteChange = () => checkSession();
 
     router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
@@ -53,18 +50,23 @@ export default function StoreHeader() {
       setIsLoggedIn(false);
       router.push("/");
     } catch (error) {
-      console.error("Logout failed", error);
+      console.error(error);
     }
   };
 
   return (
     <HeaderContainer>
       <LeftSection>
-        <Logo
-          src="https://i.pinimg.com/736x/b9/68/ee/b968ee908ef150e3c4b2f82ccaed351f.jpg"
-          alt="Logo"
-        />
-        <Link href="/" passHref>
+        <LogoWrapper>
+          <Image
+            src="https://i.pinimg.com/736x/b9/68/ee/b968ee908ef150e3c4b2f82ccaed351f.jpg"
+            alt="Logo"
+            width={60}
+            height={60}
+            style={{ objectFit: "cover" }}
+          />
+        </LogoWrapper>
+        <Link href="/" passHref legacyBehavior>
           <Title>retrodream</Title>
         </Link>
       </LeftSection>
@@ -74,15 +76,15 @@ export default function StoreHeader() {
           <LoginButton onClick={handleLogout}>Logout</LoginButton>
         ) : (
           <>
-            <Link href="/login" passHref>
+            <Link href="/login" passHref legacyBehavior>
               <LoginButton>Login</LoginButton>
             </Link>
-            <Link href="/register" passHref>
+            <Link href="/register" passHref legacyBehavior>
               <RegisterButton>Register</RegisterButton>
             </Link>
           </>
         )}
-        <Link href="/cart" passHref>
+        <Link href="/cart" passHref legacyBehavior>
           <CartButton>Cart</CartButton>
         </Link>
       </RightSection>

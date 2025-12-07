@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const HeaderContainer = styled.header`
   width: 100%;
@@ -14,7 +14,7 @@ export const HeaderContainer = styled.header`
   flex-wrap: wrap;
   min-height: 80px;
   gap: 10px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 
   @media (max-width: 768px) {
     justify-content: center;
@@ -33,11 +33,11 @@ export const LeftSection = styled.div`
   }
 `;
 
-export const Logo = styled.img`
+export const LogoWrapper = styled.div`
   width: 60px;
   height: 60px;
-  object-fit: cover;
   border-radius: 12px;
+  overflow: hidden;
 
   @media (max-width: 480px) {
     width: 50px;
@@ -53,52 +53,6 @@ export const Title = styled.h1`
 
   @media (max-width: 480px) {
     font-size: 1.5rem;
-  }
-`;
-
-export const CenterSection = styled.div`
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  align-items: center;
-  flex-grow: 1;
-
-  @media (max-width: 768px) {
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 10px;
-  }
-`;
-
-export const NavButton = styled.button`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: transparent;
-  border: none;
-  font-size: 1rem;
-  color: #013a4e;
-  cursor: pointer;
-  font-weight: 600;
-  transition: color 0.2s ease;
-
-  &:hover {
-    text-decoration: underline;
-    color: #024e6b;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-  }
-`;
-
-export const IconImg = styled.img`
-  width: 20px;
-  height: 20px;
-
-  @media (max-width: 480px) {
-    width: 18px;
-    height: 18px;
   }
 `;
 
@@ -158,5 +112,15 @@ export const CartButton = styled(LoginButton)`
   &:hover {
     background: #ffde59;
     color: #4a3200;
+  }
+`;
+
+export const IconWrapper = styled.div`
+  width: 20px;
+  height: 20px;
+
+  @media (max-width: 480px) {
+    width: 18px;
+    height: 18px;
   }
 `;

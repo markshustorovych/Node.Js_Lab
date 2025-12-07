@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Wrapper = styled.div`
   padding: 2rem;
@@ -7,12 +7,13 @@ export const Wrapper = styled.div`
   text-align: center;
 `;
 
-export const Image = styled.img`
+export const ImageWrapper = styled.div`
   width: 100%;
   max-width: 600px;
+  height: 400px;
+  margin: 0 auto 1.5rem auto;
   border-radius: 12px;
-  margin-bottom: 1.5rem;
-  object-fit: cover;
+  overflow: hidden;
 `;
 
 export const Title = styled.h1`
@@ -43,7 +44,9 @@ export const BuyButton = styled.button`
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   display: block;
   margin: 0 auto;
 

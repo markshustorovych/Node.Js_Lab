@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-`;
+export const Container = styled.div``;
 
 export const Content = styled.div`
   max-width: 800px;
@@ -40,14 +39,14 @@ export const ItemInfo = styled.div`
   flex: 1;
 `;
 
-export const ItemImage = styled.img`
+export const ItemImageWrapper = styled.div`
   width: 80px;
   height: 80px;
-  object-fit: cover;
   border-radius: 8px;
+  overflow: hidden;
   margin-left: 1rem;
+  flex-shrink: 0;
 `;
-
 
 export const TotalAmount = styled.div`
   font-size: 1.4rem;
@@ -65,7 +64,9 @@ export const Button = styled.button`
   border-radius: 12px;
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.2s ease;
   display: block;
   margin: 2rem auto 0;
 
